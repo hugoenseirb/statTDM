@@ -1,16 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# load les classes
+# load la classe
 data1 = np.load("data1.npy") 
 
-#Q1 : affichage du nuage
+# affichage du nuage
 X = data1[0,:] 
 Y = data1[1,:]
 
 plt.scatter(X,Y)
 
-#Q1 : regression linéaire OLS
+# regression linéaire OLS
 
 n = X.shape[0]                 # on récup le nb de point ( 100 ici )
 colonne_de_un = np.ones((n,1)) # colonne de n 1 (chaque point aura son 1 sur sa ligne)
