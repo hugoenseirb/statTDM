@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from OLS import OLS
 
 # load la classe
 data1 = np.load("data1.npy") 

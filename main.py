@@ -1,31 +1,63 @@
+# REPONSES AUX Q3 Q4 Q7 Q8
+
+from OLS import OLS
+from Ridge import Ridge
+from Lasso import Lasso
+
 import numpy as np
 import matplotlib.pyplot as plt
 
-# load les classes
-data1 = np.load("data1.npy") 
 data2 = np.load("data2.npy") 
-print(data1.shape)
-#Q1 : affichage du nuage
-X = data1[0,:] 
-Y = data1[1,:]
-plt.scatter(X,Y)
+data3 = np.load("data3.npy") 
+
+#OLS
+q_vec = [2,3,4,5,6,7,8,9,10] # nb de nombre de fonctions φᵢ(x) et aussi : degré du polyome phi.
+RE_vec = []
+
+for qi in q_vec:
+    R_OLS = OLS(qi, data2)
+    print("[OLS] q =", qi, "R =", R_OLS)
+    RE_vec.append(R_OLS)
+    
+plt.figure()
+plt.plot(q_vec, RE_vec, marker="o", color="blue")
+plt.xlabel("Degré du polynôme q")
+plt.ylabel("Risque empirique R(q)")
+plt.title("[OLS] Évolution du risque empirique en fonction de q")
+plt.grid(True)
 plt.show()
 
-#Q1 : regression linéaire OLS
+#RIDGE
+lambda_vec = [0, 0.1, 1, 5, 10, 50]
+R_ridge_vec = []
 
-n = X.shape[0]                 # on récup le nb de point ( 100 ici )
-colonne_de_un = np.ones((n,1)) # colonne de n 1 (chaque point aura son 1 sur sa ligne)
-X_colonne = X.reshape(-1,1)    # on passe X de ligne à colonne
+for lambd in lambda_vec:
+    R_ridge = Ridge(lambd, data3)
+    print("[Ridge] lambda = ", lambd, "R(lambda) = ", R_ridge)
+    R_ridge_vec.append(R_ridge)
+    
+plt.figure()
+plt.plot(lambda_vec, R_ridge_vec, marker="o", color="blue")
+plt.xlabel("Valeurs de lambda")
+plt.ylabel("Risque empirique R(q)")
+plt.title("[RIDGE] Évolution du risque empirique en fonction de lambda")
+plt.grid(True)
+plt.show()
 
-X_avec_un = np.hstack((colonne_de_un, X_colonne)) # on assemble la colonne de 1 avec la colonne de X
+#LASSO 
 
-beta_vect = np.linalg.inv(X_avec_un.T @ X_avec_un) @ (X_avec_un.T @ Y) # calcul des coefficients OLS : bêta = (X^T X)^(-1) X^T Y
-beta0 = beta_vect[0]
-beta1 = beta_vect[1]
-print("beta0 =", beta0)
-print("beta1 =", beta1)
+lambda_vec = [0, 0.1, 1, 5, 10, 50]
+R_lasso_vec = []
 
-Y_prediction = X_avec_un @ beta_vect # calcule la prediction yi = b0 + b1xi pour tous les points i
-
-R = np.mean((Y - Y_prediction)**2) # risque empirique (écart entre Y fournis et Y prédits)
-print("Risque empirique : R(beta0, beta) =", R)
+for lambd in lambda_vec:
+    R_lasso = Lasso(lambd, data3)
+    print("[Lasso] lambda = ", lambd, "R(lambda) = ", R_lasso)
+    R_lasso_vec.append(R_lasso)
+    
+plt.figure()
+plt.plot(lambda_vec, R_lasso_vec, marker="o", color="blue")
+plt.xlabel("Valeurs de lambda")
+plt.ylabel("Risque empirique R(q)")
+plt.title("[LASSO] Évolution du risque empirique en fonction de lambda")
+plt.grid(True)
+plt.show()
