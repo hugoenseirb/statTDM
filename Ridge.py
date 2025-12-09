@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.linear_model import RidgeClassifier
 import matplotlib.pyplot as plt
 
 def Ridge(lambd, data):
