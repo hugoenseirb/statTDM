@@ -69,3 +69,63 @@ plt.figure(figsize=(8,8))
 disp.plot(cmap="Blues", values_format="d", ax=plt.gca())
 plt.title("Matrice de confusion, Régression logistique (MNIST)")
 plt.show()
+
+##################################################################
+# Q2 – AFFICHAGE DES COEFFICIENTS BETA COMME IMAGES
+#################################################################
+
+betas = log_reg.coef_
+
+plt.figure(figsize=(10, 10))
+
+for k in range(10):
+    ax = plt.subplot(5, 2, k + 1)
+    plt.imshow(betas[k].reshape(28, 28), cmap="RdBu")
+    plt.title(f"Coefficients beta pour la classe {k}")
+    plt.colorbar()
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+plt.suptitle("Visualisation des coefficients beta, Régression logistique")
+plt.tight_layout()
+plt.show()
+
+###############################################################################
+# RÉGRESSION LOGISTIQUE LASSO + VISUALISATION DES COEFF
+##############################################################################
+from sklearn.linear_model import LogisticRegression
+
+# On réduit la taille du jeu d'apprentissage pour que LASSO converge vite
+n_sub = 10000   # par ex. 10 000 images au lieu de 52 500
+X_train_sub = X_train_scaled[:n_sub]
+y_train_sub = y_train[:n_sub]
+
+lasso_log_reg = LogisticRegression(
+    penalty="l1",
+    solver="saga", # nécessaire pour l1
+    multi_class="multinomial",
+    max_iter=1000,
+    C=1.0,
+    n_jobs=-1, # utilise tous les cœurs dispo
+    verbose=1  # affiche la progression dans le terminal
+)
+
+print("Entraînement du modèle LASSO sur", n_sub, "images...")
+lasso_log_reg.fit(X_train_sub, y_train_sub)
+print("Entraînement terminé.")
+
+# Coefficients β (10 classes × 784 pixels)
+betas_lasso = lasso_log_reg.coef_
+
+plt.figure(figsize=(10, 10))
+for k in range(10):
+    ax = plt.subplot(5, 2, k + 1)
+    plt.imshow(betas_lasso[k].reshape(28, 28), cmap="RdBu")
+    plt.title(f"[LASSO] Coefficients beta pour classe {k}")
+    plt.colorbar()
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+plt.suptitle("Visualisation des coefficients beta, regr logistique", fontsize=16)
+plt.tight_layout()
+plt.show()
