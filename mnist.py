@@ -38,3 +38,34 @@ for i in np.arange(m):
   plt.imshow(img[i,:].reshape((28,28)), cmap='gray')
   ex_plot.set_xticks(()); ex_plot.set_yticks(())
   #lt.title("Label = %i" % lb[i])
+
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+
+###############################################################################
+# NORMALISATION DES DONNÉES (pr converger + vite)
+###############################################################################
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled  = scaler.transform(X_test)
+
+###############################################################################
+# RÉGRESSION LOGISTIQUE
+###############################################################################
+log_reg = LogisticRegression(penalty="l2", multi_class="multinomial", solver="lbfgs", max_iter=1000)
+
+log_reg.fit(X_train_scaled, y_train)
+
+# Prédictions sur le jeu de test
+y_pred = log_reg.predict(X_test_scaled)
+
+# matrice de confusion (permet de voir avec quel nombre notre nombre à été confondu)
+mat_conf = confusion_matrix(y_test, y_pred)
+disp = ConfusionMatrixDisplay(confusion_matrix=mat_conf, display_labels=np.arange(10))  # chiffres 0 à 9
+
+plt.figure(figsize=(8,8))
+disp.plot(cmap="Blues", values_format="d", ax=plt.gca())
+plt.title("Matrice de confusion, Régression logistique (MNIST)")
+plt.show()
