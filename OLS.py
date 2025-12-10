@@ -29,4 +29,4 @@ def OLS(q, data):
     plt.title("[OLS] q = " + str(q))
     plt.show()
     
-    return R_OLS
+    return R_OLS , beta_vect

@@ -29,4 +29,4 @@ def Ridge(lambd, data):
     plt.title("[Ridge] lambda = " +str(lambd))
     plt.show()
    
-    return R_ridge 
+    return R_ridge , beta_vect

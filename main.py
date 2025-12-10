@@ -15,7 +15,7 @@ q_vec = [2,3,4,5,6,7,8,9,10] # nb de nombre de fonctions φᵢ(x) et aussi : deg
 RE_vec = []
 
 for qi in q_vec:
-    R_OLS = OLS(qi, data2)
+    R_OLS, beta_OLS = OLS(qi, data2)
     print("[OLS] q =", qi, "R =", R_OLS)
     RE_vec.append(R_OLS)
     
@@ -32,7 +32,7 @@ lambda_vec = [0, 0.1, 1, 5, 10, 50]
 R_ridge_vec = []
 
 for lambd in lambda_vec:
-    R_ridge = Ridge(lambd, data3)
+    R_ridge, beta_ridge = Ridge(lambd, data3)
     print("[Ridge] lambda = ", lambd, "R(lambda) = ", R_ridge)
     R_ridge_vec.append(R_ridge)
     
